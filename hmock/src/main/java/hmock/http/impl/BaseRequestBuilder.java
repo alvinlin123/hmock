@@ -56,9 +56,9 @@ public class BaseRequestBuilder implements RequestBuilder {
 	public void handle(final HttpServletRequest servRequest, final HttpServletResponse servResponse) 
 	throws IOException {
 		
-		InputStream response = _responseBuilder.getResponseBody();
+		InputStream response = _responseBuilder.body();
 		
-		servResponse.setStatus(_responseBuilder.getStatus());
+		servResponse.setStatus(_responseBuilder.status());
 		IOUtils.copy(response, servResponse.getOutputStream());
 	}
 }
