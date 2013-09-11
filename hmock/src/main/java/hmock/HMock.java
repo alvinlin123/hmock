@@ -90,6 +90,10 @@ public class HMock {
 		
 	}
 	
+	public static void delete() {
+		
+	}
+	
 	/* instantiate this class does not make any sense */
 	private HMock() {};
 }
