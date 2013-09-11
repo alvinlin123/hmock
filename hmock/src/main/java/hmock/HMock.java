@@ -82,6 +82,22 @@ public class HMock {
 		return request;
 	}
 	
+	public static void post() {
+		
+	}
+	
+	public static void put() {
+		
+	}
+	
+	public static void delete() {
+		
+	}
+	
+	public static void head() {
+		
+	}
+	
 	/* instantiate this class does not make any sense */
 	private HMock() {};
 }
