@@ -94,10 +94,6 @@ public class HMock {
 		
 	}
 	
-	public static void head() {
-		
-	}
-	
 	/* instantiate this class does not make any sense */
 	private HMock() {};
 }
