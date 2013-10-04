@@ -103,14 +103,17 @@ public class HMock {
 	
 	public static void post() {
 		
+		throw new UnsupportedOperationException("Only GET method is supported for now");
 	}
 	
 	public static void put() {
 		
+		throw new UnsupportedOperationException("Only GET method is supported for now");
 	}
 	
 	public static void delete() {
 		
+		throw new UnsupportedOperationException("Only GET method is supported for now");
 	}
 	
 	/* instantiate this class does not make any sense */
