@@ -2,7 +2,7 @@
  * #%L
  * HMock
  * %%
- * Copyright (C) 2013 nappingcoder
+ * Copyright (C) 2013 Alvin Lin
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package hmock.http.impl;
+package hmock.http;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import java.util.Map;
 
-import hmock.http.GetRequestBuilder;
+public interface ResponseDetail {
 
-public class GetRequestBuilderImpl extends BaseRequestBuilder implements GetRequestBuilder {
-
-	public GetRequestBuilderImpl(String path) {
-		
-		super (path);
-	}
-
-	@Override
-	public boolean canHandle(HttpServletRequest request) {
-
-		return "GET".equalsIgnoreCase(request.getMethod()) && super.canHandle(request);
-	}
+	public InputStream body();
+	public Map<String, String> headers();
+	public int status();
 }

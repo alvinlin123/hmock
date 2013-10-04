@@ -38,6 +38,7 @@ public class HMockTest {
 		
 		String response = IOUtils.toString(conn.getInputStream());
 		
+		assertEquals(200, conn.getResponseCode());
 		assertEquals("A,B,C", response);
 	}
 	

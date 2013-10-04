@@ -19,52 +19,52 @@
  */
 package hmock.http.impl;
 
-import hmock.http.RequestBuilder;
-import hmock.http.ResponseBuilder;
+import hmock.http.RequestSpec;
+import hmock.http.ResponseDetail;
+import hmock.http.ResponseSpec;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matcher;
 
-public class BaseRequestBuilder implements RequestBuilder {
+public class BaseRequestSpec implements RequestSpec {
 
-	private DefaultResponseBuilder _responseBuilder;
+	private DefaultResponseSpec _responseSpec;
 	private String _path;
 	
-	public BaseRequestBuilder(final String path) {
+	public BaseRequestSpec(final String path) {
 		
 		_path = path;
 	}
 	
 	@Override
-	public RequestBuilder pathparam(final String name, final Matcher<String> value) {
+	public RequestSpec pathparam(final String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public RequestBuilder param(final String name, final Matcher<String> value) {
+	public RequestSpec requiredParam(final String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public RequestBuilder header(final String name, final Matcher<String> value) {
+	public RequestSpec requiredHeader(final String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseBuilder respond() {
+	public ResponseSpec respond() {
 		
-		_responseBuilder = new DefaultResponseBuilder();
+		_responseSpec= new DefaultResponseSpec(this);
 		
-		return _responseBuilder;
+		return _responseSpec;
 	}
 	
 	public boolean canHandle(final HttpServletRequest request) {
@@ -75,9 +75,18 @@ public class BaseRequestBuilder implements RequestBuilder {
 	public void handle(final HttpServletRequest servRequest, final HttpServletResponse servResponse) 
 	throws IOException {
 		
-		InputStream response = _responseBuilder.body();
+		ResponseDetail detail = _responseSpec.generateResponse(servRequest);
 		
-		servResponse.setStatus(_responseBuilder.status());
-		IOUtils.copy(response, servResponse.getOutputStream());
+		servResponse.setStatus(detail.status());
+		injectHeaders(servResponse, detail.headers());
+		IOUtils.copy(detail.body(), servResponse.getOutputStream());
+	}
+
+	private void injectHeaders(HttpServletResponse servResponse, Map<String, String> headers) {
+
+		for (Map.Entry<String, String> entry : headers.entrySet()) {
+			
+			servResponse.addHeader(entry.getKey(), entry.getValue());
+		}
 	}
 }

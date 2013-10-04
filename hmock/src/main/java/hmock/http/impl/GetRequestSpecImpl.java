@@ -17,8 +17,22 @@
  * limitations under the License.
  * #L%
  */
-package hmock.http;
+package hmock.http.impl;
 
-public interface GetRequestBuilder extends RequestBuilder {
+import javax.servlet.http.HttpServletRequest;
 
+import hmock.http.GetRequestSpec;
+
+public class GetRequestSpecImpl extends BaseRequestSpec implements GetRequestSpec {
+
+	public GetRequestSpecImpl(String path) {
+		
+		super (path);
+	}
+
+	@Override
+	public boolean canHandle(HttpServletRequest request) {
+
+		return "GET".equalsIgnoreCase(request.getMethod()) && super.canHandle(request);
+	}
 }

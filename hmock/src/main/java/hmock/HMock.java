@@ -19,8 +19,8 @@
  */
 package hmock;
 
-import hmock.http.GetRequestBuilder;
-import hmock.http.impl.GetRequestBuilderImpl;
+import hmock.http.GetRequestSpec;
+import hmock.http.impl.GetRequestSpecImpl;
 
 import org.eclipse.jetty.server.Server;
 
@@ -91,11 +91,11 @@ public class HMock {
 		_requestHandler = new HMockRequestHandler();
 	}
 	
-	public static GetRequestBuilder get(String path) {
+	public static GetRequestSpec get(String path) {
 		
 		ensureInitialized();
 		
-		GetRequestBuilderImpl request = new GetRequestBuilderImpl(path);
+		GetRequestSpecImpl request = new GetRequestSpecImpl(path);
 		_requestHandler.addRequest(request);
 		
 		return request;
