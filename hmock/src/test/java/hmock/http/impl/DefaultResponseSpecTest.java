@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import hmock.http.CommonHttpHeaders;
 import hmock.http.ResponseDetail;
 
 import org.apache.commons.io.IOUtils;
@@ -49,6 +50,8 @@ public class DefaultResponseSpecTest {
 		assertEquals("hello world", IOUtils.toString(response.body()));
 		assertEquals("value1", response.headers().get("header1"));
 		assertEquals("value2", response.headers().get("header2"));
+		assertEquals("text/plain;charset=us-ascii", 
+				 response.headers().get(CommonHttpHeaders.CONTENT_TYPE.toHttpString()));
 	}
 	
 	@Test
@@ -75,5 +78,7 @@ public class DefaultResponseSpecTest {
 		assertEquals("hello world", IOUtils.toString(response.body()));
 		assertEquals("value1", response.headers().get("header1"));
 		assertEquals("value2", response.headers().get("header2"));
+		assertEquals("text/plain;charset=us-ascii", 
+					 response.headers().get(CommonHttpHeaders.CONTENT_TYPE.toHttpString()));
 	}
 }

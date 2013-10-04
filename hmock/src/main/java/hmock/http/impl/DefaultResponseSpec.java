@@ -19,10 +19,13 @@
  */
 package hmock.http.impl;
 
+import hmock.http.CommonHttpHeaders;
 import hmock.http.ResponseBodyProvider;
 import hmock.http.ResponseCondition;
 import hmock.http.ResponseDetail;
 import hmock.http.ResponseSpec;
+import hmock.http.impl.responseproviders.InputStreamResponseBodyProvider;
+import hmock.http.impl.responseproviders.StringResponseBodyProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -39,8 +42,6 @@ public class DefaultResponseSpec implements ResponseSpec {
 
 private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec.class);
 	
-	public static final String CONTENT_TYPE_HEADER = "Content-Type";
-
 	private BaseRequestSpec _requestSpec;
 	private DefaultResponseCondition _currentCondition;
 	private DefaultResponseDetail _currentResponseDetail;
@@ -98,9 +99,9 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec
 	public ResponseSpec contentType(String value) {
 		
 		if (_currentCondition == null) {
-			_fallbackResponseDetail.header(CONTENT_TYPE_HEADER, value);
+			_fallbackResponseDetail.header(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), value);
 		} else {
-			_currentResponseDetail.header(CONTENT_TYPE_HEADER, value);
+			_currentResponseDetail.header(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), value);
 		}
 		
 		return this;
@@ -109,35 +110,29 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec
 	@Override
 	public ResponseSpec body(final InputStream body) {
 
-		if (_currentCondition == null) {
-			_fallbackResponseDetail.body(body);
-		} else {
-			_currentResponseDetail.body(body);
-		}
-		
-		return this;
+		InputStreamResponseBodyProvider provider = new InputStreamResponseBodyProvider(body);
+				
+		return body(provider);
 	}
 
 	@Override
 	public ResponseSpec body(final String body) {
 		
-		InputStream bodyIs = null;
-		try {
-			bodyIs = new ByteArrayInputStream(body.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			
-			/*should never come here*/
-			LOGGER.error("We don't have UTF-8?", e);
-		}
+		StringResponseBodyProvider provider = new StringResponseBodyProvider(body);
 		
-		return body(bodyIs);
+		return body(provider);
 	}
 
 	@Override
 	public ResponseSpec body(final ResponseBodyProvider body) {
 		
+		if (_currentCondition == null) {
+			_fallbackResponseDetail.body(body);
+		} else {
+			_currentResponseDetail.body(body);
+		}
 			
-		return null;
+		return this;
 	}
 	
 	public ResponseDetail generateResponse(final HttpServletRequest request) {

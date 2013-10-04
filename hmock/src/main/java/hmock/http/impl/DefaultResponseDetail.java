@@ -19,6 +19,8 @@
  */
 package hmock.http.impl;
 
+import hmock.http.CommonHttpHeaders;
+import hmock.http.ResponseBodyProvider;
 import hmock.http.ResponseDetail;
 
 import java.io.ByteArrayInputStream;
@@ -26,19 +28,22 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.concurrent.ConcurrentException;
+
 public class DefaultResponseDetail implements ResponseDetail {
 
-	private InputStream body = new ByteArrayInputStream("".getBytes());
+	private static final String CONTENT_TYPE_HEADER_TEMPLATE = "%s;charset=%s";
+	private ResponseBodyProvider body = null;
 	private Map<String, String> headers = new HashMap<String, String>();
 	private int status = 204;
 	
 	@Override
 	public InputStream body() {
 
-		return body;
+		return body.getResponseBody();
 	}
 	
-	public DefaultResponseDetail body(final InputStream body) {
+	public DefaultResponseDetail body(final ResponseBodyProvider body) {
 		
 		this.body = body;
 
@@ -49,6 +54,13 @@ public class DefaultResponseDetail implements ResponseDetail {
 			 */
 			this.status = 200;
 		}
+		
+		String contentType = String.format(
+								CONTENT_TYPE_HEADER_TEMPLATE, 
+								body.getContentType(), 
+								body.getCharset());
+		
+		header(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), contentType);
 		
 		return this;
 	}
