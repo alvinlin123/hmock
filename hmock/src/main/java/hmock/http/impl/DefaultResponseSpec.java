@@ -33,16 +33,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class DefaultResponseSpec implements ResponseSpec {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec.class);
-	
 	private DefaultRequestSpec _requestSpec;
 
-	private int status;
+	private int status = 200;
 	private ResponseBodyProvider body;
 	private Map<String, String> headers = new HashMap<String, String>();
 	

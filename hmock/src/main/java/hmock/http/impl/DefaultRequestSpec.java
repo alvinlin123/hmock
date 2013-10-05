@@ -20,21 +20,23 @@
 package hmock.http.impl;
 
 import hmock.http.RequestSpec;
-import hmock.http.ResponseDetail;
 import hmock.http.SupportedHttpMethods;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
+import org.hamcrest.Matcher;
 
 public class DefaultRequestSpec implements RequestSpec {
 
 	private String _path;
 	private String _supportedMethod;
+	
+	private Map<String, List<Matcher<String>>> _parameterMatchers = new HashMap<String, List<Matcher<String>>>();
 	
 	@Override
 	public RequestSpec get(String path) {
@@ -45,19 +47,28 @@ public class DefaultRequestSpec implements RequestSpec {
 	}
 	
 	@Override
-	public RequestSpec pathparam(final String name) {
+	public RequestSpec pathparam(final String name, final Matcher<String> matcher) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public RequestSpec param(final String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public RequestSpec param(final String name, final  Matcher<String> matcher) {
+
+		List<Matcher<String>> matchers = _parameterMatchers.get(name);
+		
+		if (matchers == null) {
+			matchers = new ArrayList<Matcher<String>>();
+			_parameterMatchers.put(name, matchers);
+		}
+		
+		matchers.add(matcher);
+		
+		return this;
 	}
 
 	@Override
-	public RequestSpec header(final String name) {
+	public RequestSpec header(final String name, final Matcher<String> matcher) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +77,32 @@ public class DefaultRequestSpec implements RequestSpec {
 		
 		String httpMethod = request.getMethod();
 		String uri = request.getRequestURI();
+		boolean parameterMatches = isParameterMatches(request);
 		
-		return _supportedMethod.equals(httpMethod) && _path.equals(uri);
+		return _supportedMethod.equals(httpMethod) && _path.equals(uri) && parameterMatches;
+	}
+
+	private boolean isParameterMatches(HttpServletRequest request) {
+		
+		boolean matches = true;
+		for (Map.Entry<String, List<Matcher<String>>> entry : _parameterMatchers.entrySet()) {
+			
+			String name = entry.getKey();
+			String value = request.getParameter(name);
+			
+			for (Matcher<String> matcher : entry.getValue()) {
+				
+				if (!matcher.matches(value)) {
+					matches = false;
+					break;
+				}
+			}
+			
+			if (!matches) {
+				break;
+			}
+		}
+		
+		return matches;
 	}
 }

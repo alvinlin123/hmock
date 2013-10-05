@@ -2,7 +2,7 @@
  * #%L
  * HMock
  * %%
- * Copyright (C) 2013 nappingcoder
+ * Copyright (C) 2013 Alvin Lin
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,19 @@
  */
 package hmock.http;
 
-import org.hamcrest.Matcher;
+import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public interface RequestSpec {
+public interface ServiceSpec {
+
+	public RequestSpec getRequestSpec();
 	
-	public RequestSpec pathparam(String name, Matcher<String> matcher);
-	public RequestSpec param(String name, Matcher<String> matcher);
-	public RequestSpec header(String name, Matcher<String> matcher);
+	public ResponseSpec getResponseSpec();
 	
-	public RequestSpec get(String path);
+	public boolean canHandle(HttpServletRequest request);
+	
+	public void handle(HttpServletRequest request, HttpServletResponse response)
+	throws IOException;
 }

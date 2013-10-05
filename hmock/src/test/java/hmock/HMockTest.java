@@ -19,6 +19,7 @@
  */
 package hmock;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -42,6 +43,29 @@ public class HMockTest {
 		
 		String response = IOUtils.toString(conn.getInputStream());
 		
+		assertEquals(200, conn.getResponseCode());
+		assertEquals("A,B,C", response);
+	}
+	
+	@Test
+	public void testCanHandleParamGetRequest() throws Exception {
+		
+		HMock
+		.respond()
+			.body("A,B,C")
+		.when()
+			.get("/employees")
+			.param("name", equalTo("John"));
+		
+		URL request = new URL("http://localhost:7357/employees");
+		HttpURLConnection conn = (HttpURLConnection) request.openConnection();
+		
+		assertEquals(404, conn.getResponseCode());
+		
+		request = new URL("http://localhost:7357/employees?name=John");
+		conn = (HttpURLConnection) request.openConnection();
+		
+		String response = IOUtils.toString(conn.getInputStream());
 		assertEquals(200, conn.getResponseCode());
 		assertEquals("A,B,C", response);
 	}
