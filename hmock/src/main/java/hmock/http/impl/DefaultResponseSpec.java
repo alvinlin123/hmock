@@ -20,16 +20,14 @@
 package hmock.http.impl;
 
 import hmock.http.CommonHttpHeaders;
+import hmock.http.RequestSpec;
 import hmock.http.ResponseBodyProvider;
-import hmock.http.ResponseCondition;
 import hmock.http.ResponseDetail;
 import hmock.http.ResponseSpec;
 import hmock.http.impl.responseproviders.InputStreamResponseBodyProvider;
 import hmock.http.impl.responseproviders.StringResponseBodyProvider;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,45 +38,23 @@ import org.slf4j.LoggerFactory;
 
 public class DefaultResponseSpec implements ResponseSpec {
 
-private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec.class);
 	
-	private BaseRequestSpec _requestSpec;
-	private DefaultResponseCondition _currentCondition;
-	private DefaultResponseDetail _currentResponseDetail;
-	
-	/* to be used if no condition is fulfilled */
-	private DefaultResponseDetail _fallbackResponseDetail = new DefaultResponseDetail();
+	private DefaultRequestSpec _requestSpec;
 
-	private HashMap<DefaultResponseCondition, DefaultResponseDetail> _responseDetailCache = 
-			new HashMap<DefaultResponseCondition, DefaultResponseDetail>();
+	private int status;
+	private ResponseBodyProvider body;
+	private Map<String, String> headers = new HashMap<String, String>();
 	
-	public DefaultResponseSpec(BaseRequestSpec requestSpec) {
+	public DefaultResponseSpec(DefaultRequestSpec requestSpec) {
 		
 		this._requestSpec = requestSpec;
-	}
-	
-	@Override
-	public ResponseCondition on() {
-
-		_currentCondition = new DefaultResponseCondition(this);
-		_currentResponseDetail = new DefaultResponseDetail();
-		
-		/* for user configured (non-default) response, it makes more sense to return 200*/
-		_currentResponseDetail.status(200);
-		
-		this._responseDetailCache.put(_currentCondition, _currentResponseDetail);
-		
-		return _currentCondition;
 	}
 
 	@Override
 	public ResponseSpec status(final int status) {
 
-		if (_currentCondition == null) {
-			_fallbackResponseDetail.status(status);
-		} else {
-			_currentResponseDetail.status(status);
-		}
+		this.status = status;
 		
 		return this;
 	}
@@ -86,11 +62,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec
 	@Override
 	public ResponseSpec header(final String name, final String value) {
 
-		if (_currentCondition == null) {
-			_fallbackResponseDetail.header(name, value);
-		} else {
-			_currentResponseDetail.header(name, value);
-		}
+		this.headers.put(name, value);
 		
 		return this;
 	}
@@ -98,11 +70,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec
 	@Override
 	public ResponseSpec contentType(String value) {
 		
-		if (_currentCondition == null) {
-			_fallbackResponseDetail.header(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), value);
-		} else {
-			_currentResponseDetail.header(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), value);
-		}
+		this.headers.put(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), value);
 		
 		return this;
 	}
@@ -126,46 +94,26 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DefaultResponseSpec
 	@Override
 	public ResponseSpec body(final ResponseBodyProvider body) {
 		
-		if (_currentCondition == null) {
-			_fallbackResponseDetail.body(body);
-		} else {
-			_currentResponseDetail.body(body);
-		}
+		this.body = body;
 			
 		return this;
 	}
 	
+	@Override
+	public RequestSpec when() {
+		
+		return _requestSpec;
+	}
+	
 	public ResponseDetail generateResponse(final HttpServletRequest request) {
 		
-		ResponseDetail respDetail = null;
+		DefaultResponseDetail respDetail = new DefaultResponseDetail();
 		
-		if (request == null || _responseDetailCache.isEmpty()) {
-			
-			respDetail = this._fallbackResponseDetail;
-		} else {
-			
-			respDetail = getResponseDetailWithConditions(request);
-		}
+		/* note that oder of setting the properties is important */
+		respDetail.status(this.status);
+		respDetail.headers(this.headers);
+		respDetail.body(this.body);
 		
 		return respDetail;
-	}
-
-	private ResponseDetail getResponseDetailWithConditions(final HttpServletRequest request) {
-
-		ResponseDetail detail = null;
-		
-		for (Map.Entry<DefaultResponseCondition, DefaultResponseDetail> entry : _responseDetailCache.entrySet()) {
-			
-			if (entry.getKey().satisfied(request)) {
-				detail = entry.getValue();
-				break;
-			}
-		}
-		
-		if (detail == null) {
-			detail = this._fallbackResponseDetail;
-		}
-		
-		return detail;
 	}
 }

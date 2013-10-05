@@ -19,7 +19,7 @@
  */
 package hmock;
 
-import hmock.http.impl.BaseRequestSpec;
+import hmock.http.ServiceSpec;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 
 class HMockRequestHandler extends DefaultHandler {
 
-	private ArrayList<BaseRequestSpec> _mockRequests = new ArrayList<BaseRequestSpec>();
+	private ArrayList<ServiceSpec> _serviceSpecs = new ArrayList<ServiceSpec>();
 	
 	@Override
 	public void handle(
@@ -44,13 +44,13 @@ class HMockRequestHandler extends DefaultHandler {
 	throws IOException, ServletException {
 	
 		try {
-			for (BaseRequestSpec mockRequest : _mockRequests) {
+			for (ServiceSpec serviceSpec : _serviceSpecs) {
 				
-				if (!mockRequest.canHandle(request)) {
+				if (!serviceSpec.canHandle(request)) {
 					continue;
 				}
 				
-				mockRequest.handle(request, response);
+				serviceSpec.handle(request, response);
 				baseRequest.setHandled(true);
 				return;
 			}
@@ -60,8 +60,8 @@ class HMockRequestHandler extends DefaultHandler {
 		}
 	}
 
-	public void addRequest(BaseRequestSpec req) {
+	public void addSpec(ServiceSpec req) {
 		
-		_mockRequests.add(req);
+		_serviceSpecs.add(req);
 	}
 }

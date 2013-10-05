@@ -23,8 +23,8 @@ package hmock.http;
 public interface RequestSpec {
 	
 	public RequestSpec pathparam(String name);
-	public RequestSpec requiredParam(String name);
-	public RequestSpec requiredHeader(String name);
+	public RequestSpec param(String name);
+	public RequestSpec header(String name);
 	
-	public ResponseSpec respond();
+	public RequestSpec get(String path);
 }

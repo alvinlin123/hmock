@@ -19,8 +19,10 @@
  */
 package hmock;
 
-import hmock.http.GetRequestSpec;
-import hmock.http.impl.GetRequestSpecImpl;
+import hmock.http.ResponseSpec;
+import hmock.http.impl.DefaultRequestSpec;
+import hmock.http.impl.DefaultResponseSpec;
+import hmock.http.impl.DefaultServiceSpec;
 
 import org.eclipse.jetty.server.Server;
 
@@ -91,29 +93,17 @@ public class HMock {
 		_requestHandler = new HMockRequestHandler();
 	}
 	
-	public static GetRequestSpec get(String path) {
+	public static ResponseSpec respond() {
 		
 		ensureInitialized();
 		
-		GetRequestSpecImpl request = new GetRequestSpecImpl(path);
-		_requestHandler.addRequest(request);
+		DefaultRequestSpec requestSpec = new DefaultRequestSpec();
+		DefaultResponseSpec responseSpec = new DefaultResponseSpec(requestSpec);
+		DefaultServiceSpec serviceSpec = new DefaultServiceSpec(requestSpec, responseSpec);
 		
-		return request;
-	}
-	
-	public static void post() {
+		_requestHandler.addSpec(serviceSpec);
 		
-		throw new UnsupportedOperationException("Only GET method is supported for now");
-	}
-	
-	public static void put() {
-		
-		throw new UnsupportedOperationException("Only GET method is supported for now");
-	}
-	
-	public static void delete() {
-		
-		throw new UnsupportedOperationException("Only GET method is supported for now");
+		return responseSpec;
 	}
 	
 	/* instantiate this class does not make any sense */

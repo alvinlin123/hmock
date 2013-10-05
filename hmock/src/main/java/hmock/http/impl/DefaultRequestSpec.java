@@ -21,7 +21,7 @@ package hmock.http.impl;
 
 import hmock.http.RequestSpec;
 import hmock.http.ResponseDetail;
-import hmock.http.ResponseSpec;
+import hmock.http.SupportedHttpMethods;
 
 import java.io.IOException;
 import java.util.Map;
@@ -31,14 +31,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-public class BaseRequestSpec implements RequestSpec {
+public class DefaultRequestSpec implements RequestSpec {
 
-	private DefaultResponseSpec _responseSpec;
 	private String _path;
+	private String _supportedMethod;
 	
-	public BaseRequestSpec(final String path) {
+	@Override
+	public RequestSpec get(String path) {
 		
-		_path = path;
+		this._path = path;
+		this._supportedMethod = SupportedHttpMethods.GET.name();
+		return this;
 	}
 	
 	@Override
@@ -48,45 +51,22 @@ public class BaseRequestSpec implements RequestSpec {
 	}
 
 	@Override
-	public RequestSpec requiredParam(final String name) {
+	public RequestSpec param(final String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public RequestSpec requiredHeader(final String name) {
+	public RequestSpec header(final String name) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public ResponseSpec respond() {
-		
-		_responseSpec= new DefaultResponseSpec(this);
-		
-		return _responseSpec;
 	}
 	
 	public boolean canHandle(final HttpServletRequest request) {
 		
-		return _path.equals(request.getRequestURI());
-	}
-	
-	public void handle(final HttpServletRequest servRequest, final HttpServletResponse servResponse) 
-	throws IOException {
+		String httpMethod = request.getMethod();
+		String uri = request.getRequestURI();
 		
-		ResponseDetail detail = _responseSpec.generateResponse(servRequest);
-		
-		servResponse.setStatus(detail.status());
-		injectHeaders(servResponse, detail.headers());
-		IOUtils.copy(detail.body(), servResponse.getOutputStream());
-	}
-
-	private void injectHeaders(HttpServletResponse servResponse, Map<String, String> headers) {
-
-		for (Map.Entry<String, String> entry : headers.entrySet()) {
-			
-			servResponse.addHeader(entry.getKey(), entry.getValue());
-		}
+		return _supportedMethod.equals(httpMethod) && _path.equals(uri);
 	}
 }

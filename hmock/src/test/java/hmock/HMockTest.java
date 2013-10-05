@@ -31,7 +31,11 @@ public class HMockTest {
 	@Test
 	public void testCanHandleParamlessGetRequest() throws Exception {
 		
-		HMock.get("/employees").respond().body("A,B,C");
+		HMock
+		.respond()
+			.body("A,B,C")
+		.when()
+			.get("/employees");
 		
 		URL request = new URL("http://localhost:7357/employees");
 		HttpURLConnection conn = (HttpURLConnection) request.openConnection();
@@ -45,7 +49,11 @@ public class HMockTest {
 	@Test
 	public void test404IfWrongHttpMethod() throws Exception {
 		
-		HMock.get("/employees/nopost").respond().body("A,B,C");
+		HMock
+			.respond()
+				.body("A,B,C")
+			.when()
+				.get("/employees/nopost");
 		
 		URL request = new URL("http://localhost:7357/employees/nopost");
 		HttpURLConnection conn = (HttpURLConnection) request.openConnection();

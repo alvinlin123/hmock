@@ -19,12 +19,7 @@
  */
 package hmock.http.impl;
 
-import static org.easymock.EasyMock.*;
-
-import static org.junit.Assert.*;
-
-import javax.servlet.http.HttpServletRequest;
-
+import static org.junit.Assert.assertEquals;
 import hmock.http.CommonHttpHeaders;
 import hmock.http.ResponseDetail;
 
@@ -34,7 +29,7 @@ import org.junit.Test;
 public class DefaultResponseSpecTest {
 
 	@Test
-	public void testReponseWithoutCondition() throws Exception {
+	public void testReponseSpecGenerateCorrectResponse() throws Exception {
 		
 		DefaultResponseSpec responseSpec = new DefaultResponseSpec(null);
 		
@@ -52,33 +47,5 @@ public class DefaultResponseSpecTest {
 		assertEquals("value2", response.headers().get("header2"));
 		assertEquals("text/plain;charset=us-ascii", 
 				 response.headers().get(CommonHttpHeaders.CONTENT_TYPE.toHttpString()));
-	}
-	
-	@Test
-	public void testReponseWithOneConditionExactMatch() throws Exception {
-		
-		DefaultResponseSpec responseSpec = new DefaultResponseSpec(null);
-		
-		responseSpec
-			.on()
-				.param("param1", "value1")
-			.reply()
-				.body("hello world")
-				.status(200)
-				.header("header1", "value1")
-				.header("header2", "value2");
-		
-		HttpServletRequest request = createNiceMock(HttpServletRequest.class);
-		expect(request.getParameter("param1")).andReturn("value1").once();
-		replay(request);
-		
-		ResponseDetail response = responseSpec.generateResponse(request);
-		
-		assertEquals(200, response.status());
-		assertEquals("hello world", IOUtils.toString(response.body()));
-		assertEquals("value1", response.headers().get("header1"));
-		assertEquals("value2", response.headers().get("header2"));
-		assertEquals("text/plain;charset=us-ascii", 
-					 response.headers().get(CommonHttpHeaders.CONTENT_TYPE.toHttpString()));
 	}
 }
