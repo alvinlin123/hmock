@@ -38,7 +38,7 @@ public class DefaultResponseSpec implements ResponseSpec {
 	private DefaultRequestSpec _requestSpec;
 
 	private int status = 200;
-	private ResponseBodyProvider body;
+	private ResponseBodyProvider body = new StringResponseBodyProvider("");
 	private Map<String, String> headers = new HashMap<String, String>();
 	
 	public DefaultResponseSpec(DefaultRequestSpec requestSpec) {

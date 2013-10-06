@@ -48,6 +48,30 @@ public class HMockTest {
 	}
 	
 	@Test
+	public void testCanHandleCanSetResponseCode() throws Exception {
+		
+		HMock
+		.respond()
+			.status(400)
+			.body("bad request")
+		.when()
+			.get("/statuscode");
+		
+		URL request = new URL("http://localhost:7357/statuscode");
+		HttpURLConnection conn = (HttpURLConnection) request.openConnection();
+		
+		assertEquals(400, conn.getResponseCode());
+		
+		/* 
+		 * need to read error after invoke a method that will initiate the
+		 * http connection (.getResponseCode). Oh HttpURLConnection API...
+		 *
+		 */
+		String responseBody = IOUtils.toString(conn.getErrorStream());
+		assertEquals("bad request", responseBody);
+	}
+	
+	@Test
 	public void testCanHandleParamGetRequest() throws Exception {
 		
 		HMock
