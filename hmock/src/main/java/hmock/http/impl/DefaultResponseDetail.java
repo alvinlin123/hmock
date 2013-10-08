@@ -23,12 +23,9 @@ import hmock.http.CommonHttpHeaders;
 import hmock.http.ResponseBodyProvider;
 import hmock.http.ResponseDetail;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.lang3.concurrent.ConcurrentException;
 
 public class DefaultResponseDetail implements ResponseDetail {
 
