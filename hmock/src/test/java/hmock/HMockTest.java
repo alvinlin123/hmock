@@ -95,6 +95,29 @@ public class HMockTest {
 	}
 	
 	@Test
+	public void testCanHandlePathParamGetRequest() throws Exception {
+		
+		HMock
+		.respond()
+			.body("A,B,C")
+		.when()
+			.get("/employees/{name}")
+			.pathparam("name", equalTo("John"));
+		
+		URL request = new URL("http://localhost:7357/employees");
+		HttpURLConnection conn = (HttpURLConnection) request.openConnection();
+		
+		assertEquals(404, conn.getResponseCode());
+		
+		request = new URL("http://localhost:7357/employees/John");
+		conn = (HttpURLConnection) request.openConnection();
+		
+		String response = IOUtils.toString(conn.getInputStream());
+		assertEquals(200, conn.getResponseCode());
+		assertEquals("A,B,C", response);
+	}
+	
+	@Test
 	public void test404IfWrongHttpMethod() throws Exception {
 		
 		HMock
