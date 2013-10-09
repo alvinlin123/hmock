@@ -40,6 +40,7 @@ public class DefaultRequestSpec implements RequestSpec {
 	
 	private Map<String, List<Matcher<String>>> _parameterMatchers = new HashMap<String, List<Matcher<String>>>();
 	private Map<String, List<Matcher<String>>> _pathParamMatchers = new HashMap<String, List<Matcher<String>>>();
+	private Map<String, List<Matcher<String>>> _headerMatchers = new HashMap<String, List<Matcher<String>>>();
 	
 	@Override
 	public RequestSpec get(String path) {
@@ -67,20 +68,43 @@ public class DefaultRequestSpec implements RequestSpec {
 
 	@Override
 	public RequestSpec header(final String name, final Matcher<String> matcher) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		addMatcherToMap(name, matcher,_headerMatchers);
+		
+		return this;
 	}
 	
 	public boolean canHandle(final HttpServletRequest request) {
 		
 		String httpMethod = request.getMethod();
 		String uri = request.getRequestURI();
-		boolean parameterMatches = isParameterMatches(request);
 		
-		return _supportedMethod.equals(httpMethod) && pathMatches(uri) && parameterMatches;
+		return _supportedMethod.equals(httpMethod) 
+				&& isPathMatches(uri)
+				&& isHeaderMatches(request)
+				&& isParameterMatches(request);
 	}
 
-	private boolean pathMatches(final String otherPath) {
+	private boolean isHeaderMatches(HttpServletRequest request) {
+		
+		boolean matches = true;
+		
+		for (Map.Entry<String, List<Matcher<String>>> entry : _headerMatchers.entrySet()) {
+			
+			String headerName = entry.getKey();
+			String headerValue = request.getHeader(headerName);
+			
+			matches = matchesAll(headerValue, entry.getValue());		
+			
+			if (!matches) {
+				break;
+			}
+		}
+		
+		return matches;
+	}
+
+	private boolean isPathMatches(final String otherPath) {
 
 		if (otherPath == null || otherPath.isEmpty()) {
 			return false;

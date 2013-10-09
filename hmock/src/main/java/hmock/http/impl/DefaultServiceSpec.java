@@ -25,6 +25,7 @@ import hmock.http.ResponseSpec;
 import hmock.http.ServiceSpec;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +71,16 @@ public class DefaultServiceSpec implements ServiceSpec {
 		
 		response.setStatus(detail.status());
 		injectHeaders(response, detail.headers());
-		IOUtils.copy(detail.body(), response.getOutputStream());
+		
+		InputStream body = null;
+		try {
+			 body = detail.body();
+			IOUtils.copy(body, response.getOutputStream());
+		} finally {
+			if (body != null) {
+				body.close();
+			}
+		}
 		
 	}
 	

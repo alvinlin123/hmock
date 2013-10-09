@@ -70,4 +70,54 @@ public class DefaultRequestSpecTest {
 			.param("param2", equalTo("value5"));
 		assertEquals(false, requestSpec.canHandle(mockrequest));
 	}
+	
+	@Test
+	public void testCanHandlePathParamGetRequest() {
+		
+		HttpServletRequest mockrequest = createMock(HttpServletRequest.class);
+		expect(mockrequest.getRequestURI()).andReturn("/employees/john/doe").anyTimes();
+		expect(mockrequest.getMethod()).andReturn("GET").anyTimes();
+		replay(mockrequest);
+		
+		DefaultRequestSpec requestSpec = new DefaultRequestSpec();
+		requestSpec
+			.get("/employees/{first-name}/{last-name}")
+			.pathparam("first-name", equalTo("john"))
+			.pathparam("last-name", equalTo("doe"));
+			
+		assertEquals(true, requestSpec.canHandle(mockrequest));
+		
+		requestSpec = new DefaultRequestSpec();
+		requestSpec
+		.get("/employees/{first-name}/{last-name}")
+		.pathparam("first-name", equalTo("jack"))
+		.pathparam("last-name", equalTo("doe"));
+		assertEquals(false, requestSpec.canHandle(mockrequest));
+	}
+	
+	@Test
+	public void testCanHandleGetWithHeaderRequest() {
+		
+		HttpServletRequest mockrequest = createMock(HttpServletRequest.class);
+		expect(mockrequest.getRequestURI()).andReturn("/service1").anyTimes();
+		expect(mockrequest.getMethod()).andReturn("GET").anyTimes();
+		expect(mockrequest.getHeader("header1")).andReturn("value1").anyTimes();
+		expect(mockrequest.getHeader("header2")).andReturn("value2").anyTimes();
+		replay(mockrequest);
+		
+		DefaultRequestSpec requestSpec = new DefaultRequestSpec();
+		requestSpec
+			.get("/service1")
+			.header("header1", equalTo("value1"))
+			.header("header2", equalTo("value2"));
+			
+		assertEquals(true, requestSpec.canHandle(mockrequest));
+		
+		requestSpec = new DefaultRequestSpec();
+		requestSpec
+		.get("/service1")
+			.header("header1", equalTo("value1"))
+			.header("header2", equalTo("value3"));
+		assertEquals(false, requestSpec.canHandle(mockrequest));
+	}	
 }

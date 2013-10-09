@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -30,7 +31,7 @@ import org.junit.Test;
 public class HMockTest {
 
 	@Test
-	public void testCanHandleParamlessGetRequest() throws Exception {
+	public void testParamlessGetRequest() throws Exception {
 		
 		HMock
 		.respond()
@@ -48,7 +49,7 @@ public class HMockTest {
 	}
 	
 	@Test
-	public void testCanHandleCanSetResponseCode() throws Exception {
+	public void testCanSetResponseCode() throws Exception {
 		
 		HMock
 		.respond()
@@ -72,7 +73,7 @@ public class HMockTest {
 	}
 	
 	@Test
-	public void testCanHandleParamGetRequest() throws Exception {
+	public void testParamGetRequest() throws Exception {
 		
 		HMock
 		.respond()
@@ -95,7 +96,7 @@ public class HMockTest {
 	}
 	
 	@Test
-	public void testCanHandlePathParamGetRequest() throws Exception {
+	public void testPathParamGetRequest() throws Exception {
 		
 		HMock
 		.respond()
@@ -112,6 +113,24 @@ public class HMockTest {
 		request = new URL("http://localhost:7357/employees/John");
 		conn = (HttpURLConnection) request.openConnection();
 		
+		String response = IOUtils.toString(conn.getInputStream());
+		assertEquals(200, conn.getResponseCode());
+		assertEquals("A,B,C", response);
+	}
+	
+	@Test
+	public void testRequestWithHeader() throws Exception {
+	
+		HMock
+			.respond()
+				.body("A,B,C")
+			.when()
+				.get("/headertest")
+				.header("X-TEST-HEADER", equalTo("test-value"));
+		
+		URL request = new URL("http://localhost:7357/headertest");
+		HttpURLConnection conn = (HttpURLConnection) request.openConnection();
+		conn.setRequestProperty("X-TEST-HEADER", "test-value");
 		String response = IOUtils.toString(conn.getInputStream());
 		assertEquals(200, conn.getResponseCode());
 		assertEquals("A,B,C", response);
