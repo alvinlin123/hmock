@@ -40,7 +40,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
-public class HMockTest {
+/**
+ * Contains sanity tests for HMock
+ * 
+ * @author Alvin
+ *
+ */
+public class BasicHMockTest {
 
 	private static final HttpClient _httpclient = HttpClients.createDefault();
 	

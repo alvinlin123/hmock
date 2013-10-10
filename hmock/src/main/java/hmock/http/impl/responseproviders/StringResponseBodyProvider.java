@@ -31,25 +31,29 @@ public class StringResponseBodyProvider extends ResponseBodyContentTypeProvider 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StringResponseBodyProvider.class);
 	
 	public static final String DEFAULT_CHARSET = "us-ascii";
-	public static final String CONTENT_TYPE = "text/plain";
-	public String _body = "";
+	public static final String DEFAULT_CONTENT_TYPE = "text/plain";
+	
+	private String _body = "";
 	
 	public StringResponseBodyProvider(final String body) {
 		
-		super(DEFAULT_CHARSET);
+		super(DEFAULT_CONTENT_TYPE, DEFAULT_CHARSET);
 		this._body = body;
 	}
 	
 	public StringResponseBodyProvider(final String body, final String charset) {
 	
-		super(charset);
+		super(DEFAULT_CONTENT_TYPE, charset);
 		this._body = body;
 	}
-
-	@Override
-	public String getContentType() {
-
-		return CONTENT_TYPE;
+	
+	public StringResponseBodyProvider(
+			final String body, 
+			final String contentType, 
+			final String charset) {
+		
+		super(contentType, charset);
+		this._body = body;
 	}
 
 	@Override

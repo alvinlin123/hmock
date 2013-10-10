@@ -17,36 +17,17 @@
  * limitations under the License.
  * #L%
  */
-package hmock.http.impl.responseproviders;
+package hmock;
 
-import hmock.http.ResponseBodyProvider;
+/**
+ * TODO
+ * 
+ * Contains tests to test that response conforms to the 
+ * response specification.
+ * 
+ * @author Alvin
+ *
+ */
+public class ResponseHMockTest {
 
-public abstract class ResponseBodyContentTypeProvider implements ResponseBodyProvider {
-
-	private String _charset = "";
-	private String _contentType = "application/octet-stream";
-	
-	public ResponseBodyContentTypeProvider() {
-	
-	}
-	
-	public ResponseBodyContentTypeProvider(final String contentType, final String charset) {
-		
-		this._charset = charset;
-		this._contentType = contentType;
-	}
-	
-	@Override
-	public String getCharset() {
-		
-		return _charset;
-	}
-
-	@Override
-	public String getContentType() {
-
-		return _contentType;
-	}
-	
-	
 }
