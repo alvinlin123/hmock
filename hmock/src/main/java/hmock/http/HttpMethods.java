@@ -19,8 +19,12 @@
  */
 package hmock.http;
 
-public enum SupportedHttpMethods {
-
+public enum HttpMethods {
+	
+	HEAD,
 	GET,
+	DELETE,
+	POST,
+	PUT,
 	;
 }

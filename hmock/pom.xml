@@ -92,7 +92,12 @@
 			<version>3.2</version>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>

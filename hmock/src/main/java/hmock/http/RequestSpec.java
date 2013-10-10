@@ -28,5 +28,9 @@ public interface RequestSpec {
 	public RequestSpec param(String name, Matcher<String> matcher);
 	public RequestSpec header(String name, Matcher<String> matcher);
 	
+	public RequestSpec head(String path);
+	public RequestSpec delete(String path);
 	public RequestSpec get(String path);
+	public RequestSpec post(String path);
+	public RequestSpec put(String path);
 }

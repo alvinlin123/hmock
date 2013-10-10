@@ -20,7 +20,7 @@
 package hmock.http.impl;
 
 import hmock.http.RequestSpec;
-import hmock.http.SupportedHttpMethods;
+import hmock.http.HttpMethods;
 import hmock.http.impl.uri.ParameterizedPath;
 import hmock.http.impl.uri.ParameterizedPath.PathMatchResult;
 
@@ -43,10 +43,42 @@ public class DefaultRequestSpec implements RequestSpec {
 	private Map<String, List<Matcher<String>>> _headerMatchers = new HashMap<String, List<Matcher<String>>>();
 	
 	@Override
+	public RequestSpec head(String path) {
+		
+		this._path = new ParameterizedPath(path);
+		this._supportedMethod = HttpMethods.HEAD.name();
+		return this;
+	}
+	
+	@Override
+	public RequestSpec delete(String path) {
+		
+		this._path = new ParameterizedPath(path);
+		this._supportedMethod = HttpMethods.DELETE.name();
+		return this;
+	}
+	
+	@Override
 	public RequestSpec get(String path) {
 		
 		this._path = new ParameterizedPath(path);
-		this._supportedMethod = SupportedHttpMethods.GET.name();
+		this._supportedMethod = HttpMethods.GET.name();
+		return this;
+	}
+	
+	@Override
+	public RequestSpec post(String path) {
+		
+		this._path = new ParameterizedPath(path);
+		this._supportedMethod = HttpMethods.POST.name();
+		return this;
+	}
+	
+	@Override
+	public RequestSpec put(String path) {
+		
+		this._path = new ParameterizedPath(path);
+		this._supportedMethod = HttpMethods.PUT.name();
 		return this;
 	}
 	
