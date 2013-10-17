@@ -15,8 +15,8 @@ Mock the REST API locally! Hence HMock. The concept of HMock is to start a HTTP 
 configured (through some DSL) to returne pre-defined data base on the request. 
 
 For example, you can configure in such a way that:
--Upon receiving /employee/John return a good employee data saved in a file
--Upon receiving /employee/Jack return a invalid employee data saved in a file
+* Upon receiving /employee/John return a good employee data saved in a file
+* Upon receiving /employee/Jack return a invalid employee data saved in a file
 
 So that if you point your client application to the locally mocked server, you can test the client's behaviour with 
 stable data; you will also be able to handcraft data to trigger may error/edge cases in your application.
