@@ -29,70 +29,70 @@ import java.util.Map;
 
 public class DefaultResponseDetail implements ResponseDetail {
 
-	private static final String CONTENT_TYPE_HEADER_TEMPLATE = "%s;charset=%s";
-	private ResponseBodyProvider body = null;
-	private Map<String, String> headers = new HashMap<String, String>();
-	private int status = 204;
-	
-	@Override
-	public InputStream body() {
+    private static final String CONTENT_TYPE_HEADER_TEMPLATE = "%s;charset=%s";
+    private ResponseBodyProvider body = null;
+    private Map<String, String> headers = new HashMap<String, String>();
+    private int status = 204;
+    
+    @Override
+    public InputStream body() {
 
-		return body.getResponseBody();
-	}
-	
-	public DefaultResponseDetail body(final ResponseBodyProvider body) {
-		
-		this.body = body;
+        return body.getResponseBody();
+    }
+    
+    public DefaultResponseDetail body(final ResponseBodyProvider body) {
+        
+        this.body = body;
 
-		if (this.status == 204) {
-			/* 
-			 * assume user gives non-empty content, so we must set the code to non-204 
-			 * per HTTP spec
-			 */
-			this.status = 200;
-		}
-		
-		String contentType = String.format(
-								CONTENT_TYPE_HEADER_TEMPLATE, 
-								body.getContentType(), 
-								body.getCharset());
-		
-		header(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), contentType);
-		
-		return this;
-	}
+        if (this.status == 204) {
+            /* 
+             * assume user gives non-empty content, so we must set the code to non-204 
+             * per HTTP spec
+             */
+            this.status = 200;
+        }
+        
+        String contentType = String.format(
+                                CONTENT_TYPE_HEADER_TEMPLATE, 
+                                body.getContentType(), 
+                                body.getCharset());
+        
+        header(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), contentType);
+        
+        return this;
+    }
 
-	@Override
-	public Map<String, String> headers() {
+    @Override
+    public Map<String, String> headers() {
 
-		return headers;
-	}
-	
-	public DefaultResponseDetail headers(final Map<String, String> headers) {
-		
-		this.headers = headers;
-		
-		return this;
-	}
-	
-	public DefaultResponseDetail header(final String name, final String value) {
-		
-		this.headers.put(name, value);
-		
-		return this;
-	}
-	
-	@Override
-	public int status() {
+        return headers;
+    }
+    
+    public DefaultResponseDetail headers(final Map<String, String> headers) {
+        
+        this.headers = headers;
+        
+        return this;
+    }
+    
+    public DefaultResponseDetail header(final String name, final String value) {
+        
+        this.headers.put(name, value);
+        
+        return this;
+    }
+    
+    @Override
+    public int status() {
 
-		return status;
-	}
-	
-	public DefaultResponseDetail status(int status) {
-		
-		this.status = status;
-		
-		return this;
-	}
+        return status;
+    }
+    
+    public DefaultResponseDetail status(int status) {
+        
+        this.status = status;
+        
+        return this;
+    }
 
 }

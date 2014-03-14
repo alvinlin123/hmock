@@ -21,24 +21,24 @@ package hmock.http;
 
 public enum CommonHttpHeaders {
 
-	
-	CONTENT_TYPE("Content-Type")
-	;
-	
-	private String _value;
-	
-	private CommonHttpHeaders(String value) {
-		
-		this._value = value;
-	}
-	
-	@Override
-	public String toString() {
-		return _value;
-	}
-	
-	public String toHttpString() {
-		
-		return toString();
-	}
+    
+    CONTENT_TYPE("Content-Type")
+    ;
+    
+    private String _value;
+    
+    private CommonHttpHeaders(String value) {
+        
+        this._value = value;
+    }
+    
+    @Override
+    public String toString() {
+        return _value;
+    }
+    
+    public String toHttpString() {
+        
+        return toString();
+    }
 }

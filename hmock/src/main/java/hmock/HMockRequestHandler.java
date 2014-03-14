@@ -33,35 +33,35 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 
 class HMockRequestHandler extends DefaultHandler {
 
-	private ArrayList<ServiceSpec> _serviceSpecs = new ArrayList<ServiceSpec>();
-	
-	@Override
-	public void handle(
-			String target, 
-			Request baseRequest,
-			HttpServletRequest request, 
-			HttpServletResponse response)
-	throws IOException, ServletException {
-	
-		try {
-			for (ServiceSpec serviceSpec : _serviceSpecs) {
-				
-				if (!serviceSpec.canHandle(request)) {
-					continue;
-				}
-				
-				serviceSpec.handle(request, response);
-				baseRequest.setHandled(true);
-				return;
-			}
-		} catch (Throwable e) {
-			//if anything goes wrong does requesting handling, print out the stack trace for debugging.
-			e.printStackTrace();
-		}
-	}
+    private ArrayList<ServiceSpec> _serviceSpecs = new ArrayList<ServiceSpec>();
+    
+    @Override
+    public void handle(
+            String target, 
+            Request baseRequest,
+            HttpServletRequest request, 
+            HttpServletResponse response)
+    throws IOException, ServletException {
+    
+        try {
+            for (ServiceSpec serviceSpec : _serviceSpecs) {
+                
+                if (!serviceSpec.canHandle(request)) {
+                    continue;
+                }
+                
+                serviceSpec.handle(request, response);
+                baseRequest.setHandled(true);
+                return;
+            }
+        } catch (Throwable e) {
+            //if anything goes wrong does requesting handling, print out the stack trace for debugging.
+            e.printStackTrace();
+        }
+    }
 
-	public void addSpec(ServiceSpec req) {
-		
-		_serviceSpecs.add(req);
-	}
+    public void addSpec(ServiceSpec req) {
+        
+        _serviceSpecs.add(req);
+    }
 }

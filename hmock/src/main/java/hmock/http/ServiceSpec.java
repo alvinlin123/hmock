@@ -26,12 +26,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface ServiceSpec {
 
-	public RequestSpec getRequestSpec();
-	
-	public ResponseSpec getResponseSpec();
-	
-	public boolean canHandle(HttpServletRequest request);
-	
-	public void handle(HttpServletRequest request, HttpServletResponse response)
-	throws IOException;
+    public RequestSpec getRequestSpec();
+    
+    public ResponseSpec getResponseSpec();
+    
+    public boolean canHandle(HttpServletRequest request);
+    
+    public void handle(HttpServletRequest request, HttpServletResponse response)
+    throws IOException;
 }

@@ -28,24 +28,24 @@ import org.junit.Test;
 
 public class DefaultResponseSpecTest {
 
-	@Test
-	public void testReponseSpecGenerateCorrectResponse() throws Exception {
-		
-		DefaultResponseSpec responseSpec = new DefaultResponseSpec(null);
-		
-		responseSpec
-			.body("hello world")
-			.status(400)
-			.header("header1", "value1")
-			.header("header2", "value2");
-		
-		ResponseDetail response = responseSpec.generateResponse(null);
-		
-		assertEquals(400, response.status());
-		assertEquals("hello world", IOUtils.toString(response.body()));
-		assertEquals("value1", response.headers().get("header1"));
-		assertEquals("value2", response.headers().get("header2"));
-		assertEquals("text/plain;charset=us-ascii", 
-				 response.headers().get(CommonHttpHeaders.CONTENT_TYPE.toHttpString()));
-	}
+    @Test
+    public void testReponseSpecGenerateCorrectResponse() throws Exception {
+        
+        DefaultResponseSpec responseSpec = new DefaultResponseSpec(null);
+        
+        responseSpec
+            .body("hello world")
+            .status(400)
+            .header("header1", "value1")
+            .header("header2", "value2");
+        
+        ResponseDetail response = responseSpec.generateResponse(null);
+        
+        assertEquals(400, response.status());
+        assertEquals("hello world", IOUtils.toString(response.body()));
+        assertEquals("value1", response.headers().get("header1"));
+        assertEquals("value2", response.headers().get("header2"));
+        assertEquals("text/plain;charset=us-ascii", 
+                 response.headers().get(CommonHttpHeaders.CONTENT_TYPE.toHttpString()));
+    }
 }

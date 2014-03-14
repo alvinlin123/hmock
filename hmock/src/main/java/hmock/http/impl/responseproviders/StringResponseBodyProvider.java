@@ -27,45 +27,45 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StringResponseBodyProvider extends ResponseBodyContentTypeProvider {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(StringResponseBodyProvider.class);
-	
-	public static final String DEFAULT_CHARSET = "us-ascii";
-	public static final String DEFAULT_CONTENT_TYPE = "text/plain";
-	
-	private String _body = "";
-	
-	public StringResponseBodyProvider(final String body) {
-		
-		super(DEFAULT_CONTENT_TYPE, DEFAULT_CHARSET);
-		this._body = body;
-	}
-	
-	public StringResponseBodyProvider(final String body, final String charset) {
-	
-		super(DEFAULT_CONTENT_TYPE, charset);
-		this._body = body;
-	}
-	
-	public StringResponseBodyProvider(
-			final String body, 
-			final String contentType, 
-			final String charset) {
-		
-		super(contentType, charset);
-		this._body = body;
-	}
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(StringResponseBodyProvider.class);
+    
+    public static final String DEFAULT_CHARSET = "us-ascii";
+    public static final String DEFAULT_CONTENT_TYPE = "text/plain";
+    
+    private String _body = "";
+    
+    public StringResponseBodyProvider(final String body) {
+        
+        super(DEFAULT_CONTENT_TYPE, DEFAULT_CHARSET);
+        this._body = body;
+    }
+    
+    public StringResponseBodyProvider(final String body, final String charset) {
+    
+        super(DEFAULT_CONTENT_TYPE, charset);
+        this._body = body;
+    }
+    
+    public StringResponseBodyProvider(
+            final String body, 
+            final String contentType, 
+            final String charset) {
+        
+        super(contentType, charset);
+        this._body = body;
+    }
 
-	@Override
-	public InputStream getResponseBody() {
+    @Override
+    public InputStream getResponseBody() {
 
-		InputStream stringIs = null;
-		try {
-			stringIs = new ByteArrayInputStream(_body.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.error("we don't have utf-8!?");
-		}
-		
-		return stringIs;
-	}
+        InputStream stringIs = null;
+        try {
+            stringIs = new ByteArrayInputStream(_body.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("we don't have utf-8!?");
+        }
+        
+        return stringIs;
+    }
 }

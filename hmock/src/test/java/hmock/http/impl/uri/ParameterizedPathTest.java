@@ -26,63 +26,63 @@ import org.junit.Test;
 
 public class ParameterizedPathTest {
 
-	@Test
-	public void testExactMatchRoot() {
-		
-		ParameterizedPath path = new ParameterizedPath("/");
-		
-		assertEquals(true, path.matches("/").matched());
-		assertEquals(true, path.matches("/").getParameters().isEmpty());
-		assertEquals(false, path.matches("/some/path").matched());
-		
-	}
-	
-	@Test
-	public void testExactMatchNonCanonicalPath() {
-		
-		ParameterizedPath path = new ParameterizedPath("//some//path/");
-		
-		assertEquals(true, path.matches("/some/path").matched());
-		assertEquals(true, path.matches("/some//path/").matched());
-	}
-	
-	@Test
-	public void testParamPathNonCanonicalPath() {
-		
-		ParameterizedPath path = new ParameterizedPath("/employees//{first-name}///{last-name}");
-		
-		PathMatchResult result = path.matches("employees//john/doe");
-		assertEquals(true, result.matched());
-		assertEquals("john", result.getParameters().get("first-name"));
-		assertEquals("doe", result.getParameters().get("last-name"));
-		
-		result = path.matches("employees/john/doe");
-		assertEquals(true, result.matched());
-		assertEquals("john", result.getParameters().get("first-name"));
-		assertEquals("doe", result.getParameters().get("last-name"));
-	}
-	
-	@Test
-	public void testParamPathCanonicalPath() {
-		
-		ParameterizedPath path = new ParameterizedPath("/employees/{first-name}/{last-name}");
-	
-		PathMatchResult result = path.matches("employees//john/doe");
-		assertEquals(true, result.matched());
-		assertEquals("john", result.getParameters().get("first-name"));
-		assertEquals("doe", result.getParameters().get("last-name"));
-		
-		result = path.matches("employees/john/doe");
-		assertEquals(true, result.matched());
-		assertEquals("john", result.getParameters().get("first-name"));
-		assertEquals("doe", result.getParameters().get("last-name"));
-	}	
-	
-	@Test
-	public void testToStringNoCanonicalForm() {
-		
-		ParameterizedPath path = new ParameterizedPath("/this//is///path/");
-		
-		assertEquals("/this/is/path", path.toString());
-	}
+    @Test
+    public void testExactMatchRoot() {
+        
+        ParameterizedPath path = new ParameterizedPath("/");
+        
+        assertEquals(true, path.matches("/").matched());
+        assertEquals(true, path.matches("/").getParameters().isEmpty());
+        assertEquals(false, path.matches("/some/path").matched());
+        
+    }
+    
+    @Test
+    public void testExactMatchNonCanonicalPath() {
+        
+        ParameterizedPath path = new ParameterizedPath("//some//path/");
+        
+        assertEquals(true, path.matches("/some/path").matched());
+        assertEquals(true, path.matches("/some//path/").matched());
+    }
+    
+    @Test
+    public void testParamPathNonCanonicalPath() {
+        
+        ParameterizedPath path = new ParameterizedPath("/employees//{first-name}///{last-name}");
+        
+        PathMatchResult result = path.matches("employees//john/doe");
+        assertEquals(true, result.matched());
+        assertEquals("john", result.getParameters().get("first-name"));
+        assertEquals("doe", result.getParameters().get("last-name"));
+        
+        result = path.matches("employees/john/doe");
+        assertEquals(true, result.matched());
+        assertEquals("john", result.getParameters().get("first-name"));
+        assertEquals("doe", result.getParameters().get("last-name"));
+    }
+    
+    @Test
+    public void testParamPathCanonicalPath() {
+        
+        ParameterizedPath path = new ParameterizedPath("/employees/{first-name}/{last-name}");
+    
+        PathMatchResult result = path.matches("employees//john/doe");
+        assertEquals(true, result.matched());
+        assertEquals("john", result.getParameters().get("first-name"));
+        assertEquals("doe", result.getParameters().get("last-name"));
+        
+        result = path.matches("employees/john/doe");
+        assertEquals(true, result.matched());
+        assertEquals("john", result.getParameters().get("first-name"));
+        assertEquals("doe", result.getParameters().get("last-name"));
+    }    
+    
+    @Test
+    public void testToStringNoCanonicalForm() {
+        
+        ParameterizedPath path = new ParameterizedPath("/this//is///path/");
+        
+        assertEquals("/this/is/path", path.toString());
+    }
 }

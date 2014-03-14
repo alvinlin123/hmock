@@ -23,11 +23,11 @@ import java.io.InputStream;
 
 public interface ResponseSpec {
 
-	public ResponseSpec status(int status);
-	public ResponseSpec header(String name, String value);
-	public ResponseSpec contentType(String contentTyep);
-	public ResponseSpec body(InputStream body);
-	public ResponseSpec body(String body);
-	public ResponseSpec body(ResponseBodyProvider body);
-	public RequestSpec when();
+    public ResponseSpec status(int status);
+    public ResponseSpec header(String name, String value);
+    public ResponseSpec contentType(String contentTyep);
+    public ResponseSpec body(InputStream body);
+    public ResponseSpec body(String body);
+    public ResponseSpec body(ResponseBodyProvider body);
+    public RequestSpec when();
 }

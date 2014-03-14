@@ -23,30 +23,30 @@ import hmock.http.ResponseBodyProvider;
 
 public abstract class ResponseBodyContentTypeProvider implements ResponseBodyProvider {
 
-	private String _charset = "";
-	private String _contentType = "application/octet-stream";
-	
-	public ResponseBodyContentTypeProvider() {
-	
-	}
-	
-	public ResponseBodyContentTypeProvider(final String contentType, final String charset) {
-		
-		this._charset = charset;
-		this._contentType = contentType;
-	}
-	
-	@Override
-	public String getCharset() {
-		
-		return _charset;
-	}
+    private String _charset = "";
+    private String _contentType = "application/octet-stream";
+    
+    public ResponseBodyContentTypeProvider() {
+    
+    }
+    
+    public ResponseBodyContentTypeProvider(final String contentType, final String charset) {
+        
+        this._charset = charset;
+        this._contentType = contentType;
+    }
+    
+    @Override
+    public String getCharset() {
+        
+        return _charset;
+    }
 
-	@Override
-	public String getContentType() {
+    @Override
+    public String getContentType() {
 
-		return _contentType;
-	}
-	
-	
+        return _contentType;
+    }
+    
+    
 }

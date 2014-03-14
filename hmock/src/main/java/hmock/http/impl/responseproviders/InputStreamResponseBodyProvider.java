@@ -24,18 +24,18 @@ import java.io.InputStream;
 
 public class InputStreamResponseBodyProvider extends ResponseBodyContentTypeProvider {
 
-	private InputStream _body = new ByteArrayInputStream("".getBytes());
-	
-	public InputStreamResponseBodyProvider(InputStream body) {
-		
-		this._body = body;
-	}
+    private InputStream _body = new ByteArrayInputStream("".getBytes());
+    
+    public InputStreamResponseBodyProvider(InputStream body) {
+        
+        this._body = body;
+    }
 
-	@Override
-	public InputStream getResponseBody() {
+    @Override
+    public InputStream getResponseBody() {
 
-		return this._body;
-	}
-	
-	
+        return this._body;
+    }
+    
+    
 }

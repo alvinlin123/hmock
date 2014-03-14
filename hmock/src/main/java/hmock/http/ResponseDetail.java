@@ -24,7 +24,7 @@ import java.util.Map;
 
 public interface ResponseDetail {
 
-	public InputStream body();
-	public Map<String, String> headers();
-	public int status();
+    public InputStream body();
+    public Map<String, String> headers();
+    public int status();
 }

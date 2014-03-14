@@ -28,84 +28,84 @@ import org.eclipse.jetty.server.Server;
 
 public class HMock {
 
-	/* default port is 7357 (test) */
-	public static final int DEFAULT_PORT = 7357;
-	
-	private static int port = DEFAULT_PORT;
-	
-	private static Server _mockServer;
-	
-	private static HMockRequestHandler _requestHandler = new HMockRequestHandler();
-	
-	public static void setPort(int port) {
-		
-		HMock.port = port;
-	}
-	
-	private synchronized static void ensureInitialized() {
-		
-		setupShutdownHook();
-		setupServer();
-	}
-	
-	private static void setupServer() {
-		
-		if (_mockServer != null) {
-			return;
-		}
-		
-		_mockServer = new Server(HMock.port);
-		_mockServer.setThreadPool(new DaemonThreadPool());
-		_mockServer.setHandler(_requestHandler);
-		try {
-			_mockServer.start();
-		} catch (Exception e) {
-			throw new HMockException("unable to start server", e);
-		}
-	}
+    /* default port is 7357 (test) */
+    public static final int DEFAULT_PORT = 7357;
+    
+    private static int port = DEFAULT_PORT;
+    
+    private static Server _mockServer;
+    
+    private static HMockRequestHandler _requestHandler = new HMockRequestHandler();
+    
+    public static void setPort(int port) {
+        
+        HMock.port = port;
+    }
+    
+    private synchronized static void ensureInitialized() {
+        
+        setupShutdownHook();
+        setupServer();
+    }
+    
+    private static void setupServer() {
+        
+        if (_mockServer != null) {
+            return;
+        }
+        
+        _mockServer = new Server(HMock.port);
+        _mockServer.setThreadPool(new DaemonThreadPool());
+        _mockServer.setHandler(_requestHandler);
+        try {
+            _mockServer.start();
+        } catch (Exception e) {
+            throw new HMockException("unable to start server", e);
+        }
+    }
 
-	private static void setupShutdownHook() {
-		
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if (_mockServer == null) {
-					return;
-				}
-				
-				try {
-					_mockServer.stop();
-				} catch (Exception e) {
-					/*Yea just print something to the console if jetty shutdown failed*/
-					e.printStackTrace();
-				}
-			}
-		}));
-	}
-	
-	/**
-	 * Removes currently registered mock request handlers.
-	 */
-	public static void reset() {
-		
-		_requestHandler = new HMockRequestHandler();
-	}
-	
-	public static ResponseSpec respond() {
-		
-		ensureInitialized();
-		
-		DefaultRequestSpec requestSpec = new DefaultRequestSpec();
-		DefaultResponseSpec responseSpec = new DefaultResponseSpec(requestSpec);
-		DefaultServiceSpec serviceSpec = new DefaultServiceSpec(requestSpec, responseSpec);
-		
-		_requestHandler.addSpec(serviceSpec);
-		
-		return responseSpec;
-	}
-	
-	/* instantiate this class does not make any sense */
-	private HMock() {};
+    private static void setupShutdownHook() {
+        
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                
+                if (_mockServer == null) {
+                    return;
+                }
+                
+                try {
+                    _mockServer.stop();
+                } catch (Exception e) {
+                    /*Yea just print something to the console if jetty shutdown failed*/
+                    e.printStackTrace();
+                }
+            }
+        }));
+    }
+    
+    /**
+     * Removes currently registered mock request handlers.
+     */
+    public static void reset() {
+        
+        _requestHandler = new HMockRequestHandler();
+    }
+    
+    public static ResponseSpec respond() {
+        
+        ensureInitialized();
+        
+        DefaultRequestSpec requestSpec = new DefaultRequestSpec();
+        DefaultResponseSpec responseSpec = new DefaultResponseSpec(requestSpec);
+        DefaultServiceSpec serviceSpec = new DefaultServiceSpec(requestSpec, responseSpec);
+        
+        _requestHandler.addSpec(serviceSpec);
+        
+        return responseSpec;
+    }
+    
+    /* instantiate this class does not make any sense */
+    private HMock() {};
 }

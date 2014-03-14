@@ -35,80 +35,80 @@ import javax.servlet.http.HttpServletRequest;
 
 public class DefaultResponseSpec implements ResponseSpec {
 
-	private DefaultRequestSpec _requestSpec;
+    private DefaultRequestSpec _requestSpec;
 
-	private int status = 200;
-	private ResponseBodyProvider body = new StringResponseBodyProvider("");
-	private Map<String, String> headers = new HashMap<String, String>();
-	
-	public DefaultResponseSpec(DefaultRequestSpec requestSpec) {
-		
-		this._requestSpec = requestSpec;
-	}
+    private int status = 200;
+    private ResponseBodyProvider body = new StringResponseBodyProvider("");
+    private Map<String, String> headers = new HashMap<String, String>();
+    
+    public DefaultResponseSpec(DefaultRequestSpec requestSpec) {
+        
+        this._requestSpec = requestSpec;
+    }
 
-	@Override
-	public ResponseSpec status(final int status) {
+    @Override
+    public ResponseSpec status(final int status) {
 
-		this.status = status;
-		
-		return this;
-	}
+        this.status = status;
+        
+        return this;
+    }
 
-	@Override
-	public ResponseSpec header(final String name, final String value) {
+    @Override
+    public ResponseSpec header(final String name, final String value) {
 
-		this.headers.put(name, value);
-		
-		return this;
-	}
-	
-	@Override
-	public ResponseSpec contentType(String value) {
-		
-		this.headers.put(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), value);
-		
-		return this;
-	}
+        this.headers.put(name, value);
+        
+        return this;
+    }
+    
+    @Override
+    public ResponseSpec contentType(String value) {
+        
+        this.headers.put(CommonHttpHeaders.CONTENT_TYPE.toHttpString(), value);
+        
+        return this;
+    }
 
-	@Override
-	public ResponseSpec body(final InputStream body) {
+    @Override
+    public ResponseSpec body(final InputStream body) {
 
-		InputStreamResponseBodyProvider provider = new InputStreamResponseBodyProvider(body);
-				
-		return body(provider);
-	}
+        InputStreamResponseBodyProvider provider = new InputStreamResponseBodyProvider(body);
+                
+        return body(provider);
+    }
 
-	@Override
-	public ResponseSpec body(final String body) {
-		
-		StringResponseBodyProvider provider = new StringResponseBodyProvider(body);
-		
-		return body(provider);
-	}
+    @Override
+    public ResponseSpec body(final String body) {
+        
+        StringResponseBodyProvider provider = new StringResponseBodyProvider(body);
+        
+        return body(provider);
+    }
 
-	@Override
-	public ResponseSpec body(final ResponseBodyProvider body) {
-		
-		this.body = body;
-			
-		return this;
-	}
-	
-	@Override
-	public RequestSpec when() {
-		
-		return _requestSpec;
-	}
-	
-	public ResponseDetail generateResponse(final HttpServletRequest request) {
-		
-		DefaultResponseDetail respDetail = new DefaultResponseDetail();
-		
-		/* note that oder of setting the properties is important */
-		respDetail.status(this.status);
-		respDetail.headers(this.headers);
-		respDetail.body(this.body);
-		
-		return respDetail;
-	}
+    @Override
+    public ResponseSpec body(final ResponseBodyProvider body) {
+        
+        this.body = body;
+            
+        return this;
+    }
+    
+    @Override
+    public RequestSpec when() {
+        
+        return _requestSpec;
+    }
+    
+    public ResponseDetail generateResponse(final HttpServletRequest request) {
+        
+        DefaultResponseDetail respDetail = new DefaultResponseDetail();
+        
+        /* note that oder of setting the properties is important */
+        respDetail.status(this.status);
+        respDetail.headers(this.headers);
+        respDetail.body(this.body);
+        
+        return respDetail;
+    }
 }

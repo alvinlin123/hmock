@@ -23,7 +23,7 @@ import java.io.InputStream;
 
 public interface ResponseBodyProvider {
 
-	public String getContentType();
-	public String getCharset();
-	public InputStream getResponseBody();
+    public String getContentType();
+    public String getCharset();
+    public InputStream getResponseBody();
 }

@@ -20,11 +20,11 @@
 package hmock.http;
 
 public enum HttpMethods {
-	
-	HEAD,
-	GET,
-	DELETE,
-	POST,
-	PUT,
-	;
+    
+    HEAD,
+    GET,
+    DELETE,
+    POST,
+    PUT,
+    ;
 }
