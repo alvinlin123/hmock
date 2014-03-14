@@ -26,6 +26,10 @@ For example, you can configure in such a way that:
 So that if you point your client application to the locally mocked server, you can test the client's behaviour with 
 stable data; you will also be able to handcraft data to trigger may error/edge cases in your application.
 
+<b>Download:</b>
+
+You can download the latest snapshot build [here](https://docs.google.com/file/d/0B6pUpBkjLoExR0kwMTF2VjNROVE/edit?pli=1).
+
 
 <b>Example:</b>
 
